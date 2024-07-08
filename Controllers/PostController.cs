@@ -29,7 +29,7 @@ namespace api.Controllers
     }
 
     [HttpGet]
-    [Authorize]
+    // [Authorize]
     public async Task<IActionResult> GetPosts()
     {
       var posts = await _postRepository.GetPostsAsync();
@@ -39,7 +39,7 @@ namespace api.Controllers
     }
 
     [HttpGet("{postId}")]
-    [Authorize]
+    // [Authorize]
     public async Task<IActionResult> GetPostById([FromRoute] int postId)
     {
       var post = await _postRepository.GetPostByIdAsync(postId);

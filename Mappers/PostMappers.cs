@@ -26,7 +26,19 @@ namespace api.Mappers
         CreatedOn = post.CreatedOn,
         Comments = post.Comments.Select(comment => comment.ToCommentDTO()).ToList(),
         UserId = post.UserId,
-        User = post.User!.ToUserWithoutTokenDTO()
+        User = post.User!.ToUserWithoutTokenDTO(),
+        Likes = post.Likes.Select(like => like.ToLikeDTO()).ToList()
+      };
+    }
+
+    public static LikeDTO ToLikeDTO(this Like like)
+    {
+      return new LikeDTO
+      {
+        LikeId = like.LikeId,
+        PostId = like.PostId,
+        UserId = like.UserId,
+        User = like.User?.ToUserWithoutTokenDTO()
       };
     }
   }

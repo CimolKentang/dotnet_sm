@@ -43,12 +43,18 @@ namespace api.Repositories
 
     public async Task<Post?> GetPostByIdAsync(int postId)
     {
-      return await _dbContext.Posts.Include(post => post.User).Include(post => post.Comments).FirstOrDefaultAsync(post => post.PostId == postId);
+      return await _dbContext.Posts
+        .Include(post => post.User)
+        .Include(post => post.Comments).ThenInclude(comment => comment.User)
+        .FirstOrDefaultAsync(post => post.PostId == postId);
     }
 
     public async Task<List<Post>> GetPostsAsync()
     {
-      return await _dbContext.Posts.Include(post => post.User).Include(post => post.Comments).ToListAsync();
+      return await _dbContext.Posts
+        .Include(post => post.User)
+        .Include(post => post.Comments)
+        .ToListAsync();
     }
 
     public async Task<bool> PostExist(int postId)
