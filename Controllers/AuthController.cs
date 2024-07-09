@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
-  [Route("api/authentication")]
+  [Route("api/auth")]
   [ApiController]
   public class AuthController: ControllerBase
   {
@@ -48,11 +48,8 @@ namespace api.Controllers
           if (roleResult.Succeeded)
           {
             return Ok(
-              new UserDTO
+              new TokenDTO
               {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
                 Token = _tokenService.CreateToken(user)
               }
             );
@@ -86,11 +83,8 @@ namespace api.Controllers
       if (!result.Succeeded) return Unauthorized("Invalid Credential");
 
       return Ok(
-        new UserDTO
+        new TokenDTO
         {
-          Id = user.Id,
-          UserName = user.UserName!,
-          Email = user.Email!,
           Token = _tokenService.CreateToken(user)
         }
       );

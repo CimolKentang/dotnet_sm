@@ -114,5 +114,33 @@ namespace api.Controllers
 
       return NoContent();
     }
+
+    [HttpPost]
+    [Route("like/{postId}")]
+    [Authorize]
+    public async Task<IActionResult> LikePost([FromRoute] int postId)
+    {
+      var username = User.GetUsername();
+      var user = await _userManager.FindByNameAsync(username);
+
+      var like = await _postRepository.PostLiked(user!.Id, postId);
+
+      if (like == null)
+      {
+        await _postRepository.LikePost(
+          new Like
+          {
+            PostId = postId,
+            UserId = user.Id
+          }
+        );
+
+        return Ok("Post liked");
+      }
+
+      await _postRepository.UnlikePost(like);
+
+      return Ok("Post unliked");
+    }
   }
 }

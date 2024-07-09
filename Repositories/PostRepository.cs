@@ -46,6 +46,7 @@ namespace api.Repositories
       return await _dbContext.Posts
         .Include(post => post.User)
         .Include(post => post.Comments).ThenInclude(comment => comment.User)
+        .Include(post => post.Likes)
         .FirstOrDefaultAsync(post => post.PostId == postId);
     }
 
@@ -54,12 +55,34 @@ namespace api.Repositories
       return await _dbContext.Posts
         .Include(post => post.User)
         .Include(post => post.Comments)
+        .Include(post => post.Likes)
         .ToListAsync();
+    }
+
+    public async Task<Like> LikePost(Like like)
+    {
+      await _dbContext.Likes.AddAsync(like);
+      await _dbContext.SaveChangesAsync();
+
+      return like;
     }
 
     public async Task<bool> PostExist(int postId)
     {
       return await _dbContext.Posts.AnyAsync(post => post.PostId == postId);
+    }
+
+    public async Task<Like?> PostLiked(string userId, int postId)
+    {
+      return await _dbContext.Likes.FirstOrDefaultAsync(like => like.UserId == userId && like.PostId == postId);
+    }
+
+    public async Task<Like> UnlikePost(Like like)
+    {
+      _dbContext.Likes.Remove(like);
+      await _dbContext.SaveChangesAsync();
+
+      return like;
     }
 
     public async Task<Post?> UpdatePostAsync(int postId, PostRequestDTO postRequestDTO)

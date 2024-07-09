@@ -15,5 +15,8 @@ namespace api.Interfaces
     Task<Post?> UpdatePostAsync(int postId, PostRequestDTO postRequestDTO);
     Task<Post?> DeletePostAsync(int postId);
     Task<bool> PostExist(int postId);
+    Task<Like?> PostLiked(string userId, int postId);
+    Task<Like> LikePost(Like like);
+    Task<Like> UnlikePost(Like like);
   }
 }
