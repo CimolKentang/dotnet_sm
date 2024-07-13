@@ -51,13 +51,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "59382667-8104-4946-b4f9-fe67cffcd499",
+                            Id = "2de3b9e8-5d99-454e-ad3c-c7968ad4c035",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4c3dc7e8-3040-43d2-af64-1e86a767016a",
+                            Id = "282c2323-170e-4a27-b2b0-81f8c20942c2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -219,7 +219,7 @@ namespace api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Like");
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("api.Models.Post", b =>
