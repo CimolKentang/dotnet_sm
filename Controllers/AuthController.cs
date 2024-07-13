@@ -48,8 +48,11 @@ namespace api.Controllers
           if (roleResult.Succeeded)
           {
             return Ok(
-              new TokenDTO
+              new UserDTO
               {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
                 Token = _tokenService.CreateToken(user)
               }
             );
@@ -83,8 +86,11 @@ namespace api.Controllers
       if (!result.Succeeded) return Unauthorized("Invalid Credential");
 
       return Ok(
-        new TokenDTO
+        new UserDTO
         {
+          Id = user.Id,
+          UserName = user.UserName!,
+          Email = user.Email!,
           Token = _tokenService.CreateToken(user)
         }
       );

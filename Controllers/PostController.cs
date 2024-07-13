@@ -29,25 +29,27 @@ namespace api.Controllers
     }
 
     [HttpGet]
-    // [Authorize]
+    [Authorize]
     public async Task<IActionResult> GetPosts()
     {
       var posts = await _postRepository.GetPostsAsync();
       var postsDTO = posts.Select(post => post.ToPostDTO()).ToList();
+      postsDTO = postsDTO.OrderByDescending(p => p.CreatedOn).ToList();
 
       return Ok(postsDTO);
     }
 
     [HttpGet("{postId}")]
-    // [Authorize]
+    [Authorize]
     public async Task<IActionResult> GetPostById([FromRoute] int postId)
     {
       var post = await _postRepository.GetPostByIdAsync(postId);
-
       if (post == null)
       {
         return NotFound();
       }
+
+      post.Comments = post.Comments.OrderByDescending(c => c.CreatedOn).ToList();
 
       return Ok(post.ToPostDTO());
     }
@@ -115,6 +117,20 @@ namespace api.Controllers
       return NoContent();
     }
 
+    [HttpGet("like/{likeId}")]
+    [Authorize]
+    public async Task<IActionResult> GetLike([FromRoute] int likeId)
+    {
+      var like = await _postRepository.GetLikeAsync(likeId);
+
+      if (like == null)
+      {
+        return NotFound();
+      }
+
+      return Ok(like.ToLikeDTO());
+    }
+
     [HttpPost]
     [Route("like/{postId}")]
     [Authorize]
@@ -127,7 +143,7 @@ namespace api.Controllers
 
       if (like == null)
       {
-        await _postRepository.LikePost(
+        var addedLike = await _postRepository.LikePost(
           new Like
           {
             PostId = postId,
@@ -135,12 +151,12 @@ namespace api.Controllers
           }
         );
 
-        return Ok("Post liked");
+        return CreatedAtAction(nameof(GetLike), new {likeId = addedLike.LikeId}, addedLike.ToLikeDTO());
       }
 
       await _postRepository.UnlikePost(like);
 
-      return Ok("Post unliked");
+      return Ok(like);
     }
   }
 }

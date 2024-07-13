@@ -18,5 +18,6 @@ namespace api.Interfaces
     Task<Like?> PostLiked(string userId, int postId);
     Task<Like> LikePost(Like like);
     Task<Like> UnlikePost(Like like);
+    Task<Like?> GetLikeAsync(int likeId);
   }
 }

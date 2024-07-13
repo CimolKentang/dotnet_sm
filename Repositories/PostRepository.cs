@@ -41,6 +41,11 @@ namespace api.Repositories
       return post;
     }
 
+    public async Task<Like?> GetLikeAsync(int likeId)
+    {
+      return await _dbContext.Likes.FirstOrDefaultAsync(like => like.LikeId == likeId);
+    }
+
     public async Task<Post?> GetPostByIdAsync(int postId)
     {
       return await _dbContext.Posts
