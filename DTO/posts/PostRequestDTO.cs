@@ -8,5 +8,6 @@ namespace api.DTO.posts
   public class PostRequestDTO
   {
     public string Content { get; set; } = string.Empty;
+    public IFormFile? Images { get; set; } 
   }
 }

@@ -12,6 +12,7 @@ namespace api.DTO.posts
   {
     public int PostId { get; set; }
     public string Content { get; set; } = string.Empty;
+    public string Images { get; set; } = string.Empty;
     public DateTime CreatedOn { get; set; } = DateTime.Now;
     public List<CommentDTO> Comments { get; set; } = new List<CommentDTO>();
     public List<LikeDTO> Likes { get; set; } = new List<LikeDTO>();

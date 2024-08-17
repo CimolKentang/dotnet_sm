@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -87,12 +88,15 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICommentrepository, CommentRepository>();
+builder.Services.AddScoped<IQuizRepository, QuizRepository>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 builder.Services.AddCors(options => 
 {
   options.AddPolicy("angular_sm", policyBuilder => 
   {
-    policyBuilder.WithOrigins("http://localhost:4200");
+    policyBuilder.WithOrigins("http://localhost:4100");
+    // policyBuilder.WithOrigins("*");
     policyBuilder.AllowAnyHeader();
     policyBuilder.AllowAnyMethod();
     policyBuilder.AllowCredentials();
@@ -114,6 +118,12 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+  FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "images")),
+  RequestPath = "/images"
+});
 
 app.UseCors("angular_sm");
 

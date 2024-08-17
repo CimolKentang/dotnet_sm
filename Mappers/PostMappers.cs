@@ -23,6 +23,7 @@ namespace api.Mappers
       {
         PostId = post.PostId,
         Content = post.Content,
+        Images = post.Images,
         CreatedOn = post.CreatedOn,
         Comments = post.Comments.Select(comment => comment.ToCommentDTO()).ToList(),
         UserId = post.UserId,

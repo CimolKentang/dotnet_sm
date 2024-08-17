@@ -18,14 +18,17 @@ namespace api.Controllers
   public class PostController: ControllerBase
   {
     private readonly IPostRepository _postRepository;
+    private readonly IFileService _fileService;
     private readonly UserManager<User> _userManager;
     public PostController(
       IPostRepository postRepository,
-      UserManager<User> userManager
+      UserManager<User> userManager,
+      IFileService fileService
     )
     {
       _postRepository = postRepository;
       _userManager = userManager;
+      _fileService = fileService;
     }
 
     [HttpGet]
@@ -56,13 +59,18 @@ namespace api.Controllers
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreatePost([FromBody] PostRequestDTO postRequestDTO)
+    public async Task<IActionResult> CreatePost([FromForm] PostRequestDTO postRequestDTO)
     {
       var post = postRequestDTO.FromPostRequestToPost();
       var username = User.GetUsername();
       var user = await _userManager.FindByNameAsync(username);
 
       post.UserId = user!.Id;
+
+      if (postRequestDTO.Images != null)
+      {
+        post.Images = await _fileService.SaveFileAsync(postRequestDTO.Images);
+      }
 
       await _postRepository.CreatePostAsync(post);
 

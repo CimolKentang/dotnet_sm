@@ -9,6 +9,7 @@ namespace api.Models
   {
     public int PostId { get; set; }
     public string Content { get; set; } = string.Empty;
+    public string Images { get; set; } = string.Empty;
     public DateTime CreatedOn { get; set; } = DateTime.Now;
     public List<Comment> Comments { get; set; } = new List<Comment>();
     public List<Like> Likes { get; set; } = new List<Like>();
